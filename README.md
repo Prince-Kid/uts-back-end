@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 
-# e-commerce-crafters-bn :muscle:
+# uts-bn :muscle:
 
 This repository contains the backend application of an e-commerce website developed by Andela Team Crafters
 [![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com)
