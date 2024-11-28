@@ -53,7 +53,14 @@ ioServer.on("connection", (socket) => {
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN_URL,
+    origin: (origin, callback) => {
+      const whitelist = ["https://utstech.netlify.app"];
+      if (!origin || whitelist.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
@@ -98,9 +105,7 @@ app.use("/", cartroute);
 app.use("/", wishlistroute);
 // app.use("/", TwoFaRoute);
 
-
 app.use("/", messageRoutes);
-
 
 // app.use("/", chatRouter);
 // app.use('/', messageRoutes);
