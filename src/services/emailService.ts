@@ -63,11 +63,11 @@ export const sendOrderConfirmation = async (user: any, order: any) => {
       <p><strong>Delivery Address:</strong> ${order.deliveryAddress.cell}, ${order.deliveryAddress.district}</p>
       <p>We hope you enjoy your purchase!</p>
       <p>Best regards,</p>
-      <p>Crafters E-commerce Team</p>
+      <p>UTS Technical Team</p>
     `;
 
     await transporter.sendMail({
-      from: `"Crafters E-commerce" <${process.env.EMAIL}>`,
+      from: `"UTS Technical Team" <${process.env.EMAIL}>`,
       to: user.email,
       subject: "Order Confirmation",
       html: emailContent,
@@ -170,11 +170,11 @@ export const notifyVendorsOfSale = async (order: any) => {
       }</p>
         <p>We hope you continue enjoying sales through Crafters E-commerce!</p>
         <p>Best regards,</p>
-        <p>Crafters E-commerce Team</p>
+        <p>UTS Technical Team</p>
       `;
 
       await transporter.sendMail({
-        from: `"Crafters E-commerce" <${process.env.EMAIL}>`,
+        from: `"UTS Technical Team" <${process.env.EMAIL}>`,
         to: vendor.user?.email ?? "", // Uses optional chaining to avoid accessing 'email' if 'user' is undefined
         subject: "Products Sold",
         html: vendorEmailContent,
@@ -286,13 +286,13 @@ export const notifyAdminOfSale = async (order: any) => {
       order.deliveryAddress.district
     }</p>
       <p>Best regards,</p>
-      <p>Crafters E-commerce Team</p>
+      <p>UTS Technical Team</p>
     `;
 
     // Send the email to the admin
     await transporter.sendMail({
-      from: `"Crafters E-commerce" <${process.env.EMAIL}>`,
-      to: "princemucyo12@gmail.com", // Admin email from environment variables
+      from: `"UTS Technical Team" <${process.env.EMAIL}>`,
+      to: "twizerimanaschadrack@gmail.com", // Admin email from environment variables
       subject: "Admin Notification: Products Sold",
       html: adminEmailContent,
     });

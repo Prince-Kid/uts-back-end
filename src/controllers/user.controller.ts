@@ -49,7 +49,9 @@ export const login = async (req: Request, res: Response) => {
 
     const isPasswordValid = await bcrypt.compare(password, existUser.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials. Try again" });
+      return res
+        .status(401)
+        .json({ message: "Invalid credentials. Try again" });
     }
 
     const token = await generateToken(existUser);
@@ -59,7 +61,7 @@ export const login = async (req: Request, res: Response) => {
       message: "Login successful",
       token,
       user: existUser,
-      vendorId
+      vendorId,
     });
   } catch (error) {
     console.error(error);
@@ -71,14 +73,18 @@ export const register = async (req: Request, res: Response) => {
   if (!name || !email || !password) {
     return res.status(400).json({ message: "Please fill all fields" });
   }
-  
-  const duplicate: any = await User.findOne({ where: { email: email,isVerfied: true } });
+
+  const duplicate: any = await User.findOne({
+    where: { email: email, isVerfied: true },
+  });
   if (duplicate) {
     return res.status(409).json({ Message: "Email already exists" });
   }
-  const regenerateToken = await User.findOne({where: {email: email,isVerfied: false}})
-  if(regenerateToken){
-    await User.destroy({where: {email: email,isVerfied: false}})
+  const regenerateToken = await User.findOne({
+    where: { email: email, isVerfied: false },
+  });
+  if (regenerateToken) {
+    await User.destroy({ where: { email: email, isVerfied: false } });
   }
   try {
     const hashedPwd = bcrypt.hashSync(password, 10);
@@ -108,7 +114,7 @@ export const register = async (req: Request, res: Response) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to Our E-commerce Platform</title>
+        <title>Welcome to UTS Platform</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -193,7 +199,7 @@ export const register = async (req: Request, res: Response) => {
 
             </div>
             <div class="footer">
-                <p>&copy; 2024 crafters. All rights reserved.</p>
+                <p>&copy; 2024 UTS. All rights reserved.</p>
                 <p><a class='email' href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a></p>
             </div>
         </div>
@@ -226,11 +232,10 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-
 export const findUser = async (req: Request, res: Response) => {
   const userId = req.params.id;
   try {
-    const user = await User.findOne({where: {userId: userId}});
+    const user = await User.findOne({ where: { userId: userId } });
     res.status(200).json(user);
   } catch (error: any) {
     if (error.message === "user not found") {
@@ -243,23 +248,21 @@ export const findUser = async (req: Request, res: Response) => {
 
 export const allUsers = async (req: Request, res: Response) => {
   try {
-    const users = await User.findAll()
+    const users = await User.findAll();
     res.status(200).json(users);
   } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
-}
-
+};
 
 export const allVendors = async (req: Request, res: Response) => {
   try {
-    const sellers = await User.findAll({where: {role: 'vendor'}})
+    const sellers = await User.findAll({ where: { role: "vendor" } });
     res.status(200).json(sellers);
   } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
-}
-
+};
 
 export const editUser = async (req: Request, res: Response) => {
   const { name, email, profile } = req.body;
@@ -352,7 +355,6 @@ export const verifyEmail = async (req: Request, res: Response) => {
       userData.emailVerificationToken = "";
       await userData.save();
 
-
       const transporter = nodemailer.createTransport({
         service: "gmail",
         secure: true,
@@ -361,7 +363,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
           pass: process.env.EMAIL_PASS,
         },
       });
-  
+
       let mailOptions = {
         from: process.env.EMAIL,
         to: email,
@@ -451,7 +453,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
       </body>
       </html>`,
       };
-      await transporter.sendMail(mailOptions);   
+      await transporter.sendMail(mailOptions);
       return res.status(200).json({ message: "Email verified successfully" });
     }
     return res.status(404).json({ message: "no user found" });
@@ -462,15 +464,15 @@ export const verifyEmail = async (req: Request, res: Response) => {
     res.status(500).json({ message: error.message });
   }
 };
-export const getUserInfo = async(req: Request, res: Response) => {
-  try{
-   const userId = req.params.id;
-   const user = await User.findByPk(userId);
-   if(!user){
-     return res.status(404).json({ error: "User not found"});
-   }
-   return res.status(200).json(user);
-  } catch(error: any){
-   return res.status(500).json({ error: error.message});
+export const getUserInfo = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    return res.status(200).json(user);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
   }
- }
+};
