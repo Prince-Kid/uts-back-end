@@ -54,7 +54,7 @@ ioServer.on("connection", (socket) => {
 app.use(
   cors({
     origin: (origin, callback) => {
-      const whitelist = ["https://utstech.netlify.app"];
+      const whitelist = ["https://utstech.netlify.app","http://localhost:8080"];
       if (!origin || whitelist.includes(origin)) {
         callback(null, true);
       } else {
